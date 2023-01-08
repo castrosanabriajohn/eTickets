@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,10 @@ namespace eTickets
         public void ConfigureServices(IServiceCollection services)
         {
             // DbContext Configuration
-            services.AddDbContext<AppDbContext>();
+            // To get the configurations from the appsettings we'll use the IConfiguration interface
+            // Whose value is set to a configuration property from which we'll get the connection string
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString
+                ("DefaultConnectionString")));
             services.AddControllersWithViews();
         }
 
