@@ -47,6 +47,7 @@ namespace eTickets.Controllers
             }
             return View(actorDetails);
         }
+        // Get: Actors/Edit/Id
         public async Task<IActionResult> EditAsync(int id)
         {
             var actorDetails = await _service.GetByIdAsync(id);
@@ -61,6 +62,21 @@ namespace eTickets.Controllers
                 return View(actor);
             }
             await _service.UpdateAsync(id, actor);
+            return RedirectToAction(nameof(Index));
+        }
+        // Get: Actors/Delete/Id
+        public async Task<IActionResult> Delete(int id)
+        {
+            var actorDetails = await _service.GetByIdAsync(id);
+            if (actorDetails == null) return View("NotFound");
+            return View(actorDetails);
+        }
+        [HttpPost, ActionName("Delete")] // When a POST request is sent by the same name "Delete" this method will be called
+        public async Task<IActionResult> DeleteConfirmed(int id, [Bind("Id, FullName, ProfilePictureURL, Bio")] Actor actor)
+        {
+            var actorDetails = await _service.GetByIdAsync(id);
+            if (actorDetails == null) return View("NotFound");
+            await _service.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }
