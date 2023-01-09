@@ -18,7 +18,7 @@ namespace eTickets.Controllers
         // To call this view go to -> Actors/Index
         public async Task<IActionResult> Index()
         {
-            var data = await _service.GetAll();
+            var data = await _service.GetAllAsync();
             // Pass the actors data from the controller to the view
             return View(data);
         }
@@ -34,8 +34,18 @@ namespace eTickets.Controllers
             {
                 return View(actor);
             }
-            _service.Add(actor);
+            await _service.AddAsync(actor);
             return RedirectToAction(nameof(Index));
+        }
+        // GET: Actors/Details/Id
+        public async Task<IActionResult> Details(int id)
+        {
+            var actorDetails = await _service.GetByIdAsync(id);
+            if (actorDetails == null)
+            {
+                return View("Empty");
+            }
+            return View(actorDetails);
         }
     }
 }
