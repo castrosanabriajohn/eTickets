@@ -1,23 +1,23 @@
-﻿using eTickets.Data;
+﻿using eTickets.Data.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace eTickets.Controllers
 {
     public class ActorsController : Controller
     {
-        // Declare the app Db Context
-        private readonly AppDbContext _context;
-        // Inject the context in the constructor
-        public ActorsController(AppDbContext context)
+        // Declare the ActorsService interface
+        private readonly IActorsService _service;
+        // Inject the service in the constructor
+        public ActorsController(IActorsService service)
         {
-            _context = context;
+            _service = service;
         }
         // Default Method/ActionResult -> Index() was created
         // To call this view go to -> Actors/Index
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var data = _context.Actors.ToList();
+            var data = await _service.GetAll();
             // Pass the actors data from the controller to the view
             return View(data);
         }

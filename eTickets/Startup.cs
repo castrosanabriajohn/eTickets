@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eTickets.Data.Services;
 
 namespace eTickets
 {
@@ -30,6 +31,8 @@ namespace eTickets
             // Whose value is set to a configuration property from which we'll get the connection string
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString
                 ("DefaultConnectionString")));
+            // Services Configuration
+            services.AddScoped<IActorsService, ActorsService>();
             services.AddControllersWithViews();
         }
 
