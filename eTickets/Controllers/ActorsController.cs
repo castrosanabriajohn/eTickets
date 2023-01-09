@@ -21,5 +21,10 @@ namespace eTickets.Controllers
             // Pass the actors data from the controller to the view
             return View(data);
         }
+        // Actors/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
