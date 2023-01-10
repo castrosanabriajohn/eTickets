@@ -29,7 +29,7 @@
                         <td class="align-middle">
                             <a asp-controller="Producers" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary"><i class="bi bi-pencil-square">Edit</i></a> |
                             <a asp-controller="Producers" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info"><i class="bi bi-eye">Details</i></a> |
-                            <a class="btn btn-danger text-white"><i class="bi bi-trash">Delete</i></a>
+                            <a asp-controller="Producers" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger text-white"><i class="bi bi-trash">Delete</i></a>
                         </td>
                     </tr>
                 }
