@@ -20,16 +20,16 @@
                         <td class="align-middle">
                             <img class="rounded-circle" src="@item.ProfilePictureURL" alt="@item.FullName" style="max-width: 150px" />
                         </td>
+                        <td class="align-middle"> @Html.DisplayFor(modelItem => item.FullName) </td>
+                        <td class="align-middle"> @Html.DisplayFor(modelItem => item.Bio) </td>
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.FullName)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Bio)
-                        </td>
-                        <td class="align-middle">
-                                <a asp-controller="Producers" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary"><i class="bi bi-pencil-square">Edit</i></a> |
-                            <a asp-controller="Producers" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info"><i class="bi bi-eye">Details</i></a> |
-                            <a asp-controller="Producers" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger text-white"><i class="bi bi-trash">Delete</i></a>
+                            <a asp-controller="Producers" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil-square">Edit</i>
+                            </a> | <a asp-controller="Producers" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">
+                                <i class="bi bi-eye">Details</i>
+                            </a> | <a asp-controller="Producers" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger text-white">
+                                <i class="bi bi-trash">Delete</i>
+                            </a>
                         </td>
                     </tr>
                 }
@@ -37,6 +37,4 @@
         </table>
     </div>
 </div>
-<div style="position: fixed; right: 25px; bottom: 25px" class="text-white">
-    <a asp-controller="Producers" asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle">Add New</i></a>
-</div>
+@await Html.PartialAsync("_CreateItem", "Producers");
