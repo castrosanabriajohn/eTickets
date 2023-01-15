@@ -13,9 +13,15 @@ namespace eTickets.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            // Add include propertie
+            // Add include property
             var allMovies = await _service.GetAllAsync(m => m.Cinema);
             return View(allMovies);
+        }
+        // GET: Movies/Details/Id
+        public async Task<IActionResult> Details(int id)
+        {
+            var movieDetails = await _service.GetMovieByIdAsync(id);
+            return View(movieDetails);
         }
     }
 }
