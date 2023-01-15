@@ -1,6 +1,8 @@
 ﻿using eTickets.Data.Base;
+using eTickets.Data.ViewModels;
 using eTickets.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace eTickets.Data.Services
@@ -20,6 +22,22 @@ namespace eTickets.Data.Services
                 .Include(am => am.Actors_Movies).ThenInclude(a => a.Actor)
                 .FirstOrDefaultAsync(m => m.Id == id);
             return movieDetails;
+        }
+        public async Task<NewMovieDropdownsVM> GetNewMovieDropdownsValues()
+        {
+            NewMovieDropdownsVM response = new()
+            {
+                Actors = await _context.Actors.
+                OrderBy(a => a.FullName).
+                ToListAsync(),
+                Cinemas = await _context.Cinemas
+                .OrderBy(c => c.Name)
+                .ToListAsync(),
+                Producers = await _context.Producers
+                .OrderBy(p => p.FullName)
+                .ToListAsync(),
+            };
+            return response;
         }
     }
 }
