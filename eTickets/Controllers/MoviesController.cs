@@ -27,6 +27,7 @@ namespace eTickets.Controllers
         public IActionResult Create()
         {
             ViewData["Welcome"] = "Welcome to our Store";
+            ViewBag.Description = "Store Description";
             return View();
         }
     }
