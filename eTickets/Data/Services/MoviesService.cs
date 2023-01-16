@@ -2,6 +2,7 @@
 using eTickets.Data.ViewModels;
 using eTickets.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -68,6 +69,40 @@ namespace eTickets.Data.Services
                 .ToListAsync(),
             };
             return response;
+        }
+        public async Task UpdateMovieAsync(NewMovieVM newMovie)
+        {
+            Movie dbMovie = await _context.Movies.FirstOrDefaultAsync(n => n.Id == newMovie.Id);
+            if (dbMovie != null)
+            {
+                dbMovie.Name = newMovie.Name;
+                dbMovie.Description = newMovie.Description;
+                dbMovie.Price = newMovie.Price;
+                dbMovie.ImageURL = newMovie.ImageURL;
+                dbMovie.CinemaId = newMovie.CinemaId;
+                dbMovie.StartDate = newMovie.StartDate;
+                dbMovie.EndDate = newMovie.EndDate;
+                dbMovie.MovieCategory = newMovie.MovieCategory;
+                dbMovie.ProducerId = newMovie.ProducerId;
+                await _context.SaveChangesAsync();
+            }
+            //Remove existing actors
+            List<Actor_Movie> existingActorsDb = _context.Actors_Movies.Where(am => am.MovieId == newMovie.Id).ToList();
+            _context.Actors_Movies
+                .RemoveRange(existingActorsDb);
+            await _context.SaveChangesAsync();
+            //Add Movie Actors
+            foreach (var actorId in newMovie.ActorIds)
+            {
+                Actor_Movie actorMovie = new()
+                {
+                    MovieId = newMovie.Id,
+                    ActorId = actorId,
+                };
+                await _context.Actors_Movies
+                    .AddAsync(actorMovie);
+            }
+            await _context.SaveChangesAsync();
         }
     }
 }
