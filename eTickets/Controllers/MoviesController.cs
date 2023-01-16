@@ -3,6 +3,7 @@ using eTickets.Data.ViewModels;
 using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +21,18 @@ namespace eTickets.Controllers
             // Add include property
             var allMovies = await _service.GetAllAsync(m => m.Cinema);
             return View(allMovies);
+        }
+        public async Task<IActionResult> Filter(string searchString)
+        {
+            // Add include property
+            List<Movie> allMovies = (List<Movie>)await _service.GetAllAsync(includeProperties: m => m.Cinema);
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                List<Movie> filteredMovies = allMovies.Where(predicate: am => am.Name.Contains(searchString)
+                || am.Description.Contains(searchString)).ToList();
+                return View(nameof(Index), filteredMovies);
+            }
+            return View(nameof(Index), allMovies);
         }
         // GET: Movies/Details/Id
         public async Task<IActionResult> Details(int id)
