@@ -11,23 +11,26 @@ namespace eTickets.Data.Cart
         public AppDbContext _context;
         public string ShoppingCartId { get; set; }
         public List<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public ShoppingCart(AppDbContext context) => _context = context; // Injected instance of DbContext for database communication
+        // Methods
         public void AddItemToCart(Movie movie)
         {
-            ShoppingCartItem shoppingCartItem = _context.ShoppingCartItems.FirstOrDefault(spi => spi.Movie.Id == movie.Id);
-            switch (shoppingCartItem)
+            switch (_context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id))
             {
                 case null:
-                    shoppingCartItem = new() { ShoppingCartId = ShoppingCartId, Movie = movie, Amount = 1 };
-                    _context.ShoppingCartItems.Add(shoppingCartItem);
+                    _context.ShoppingCartItems.Add(entity: new()
+                    {
+                        ShoppingCartId = ShoppingCartId,
+                        Movie = movie,
+                        Amount = 1
+                    });
                     break;
                 default:
-                    shoppingCartItem.Amount++;
+                    _context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id).Amount++;
                     break;
             }
             _context.SaveChanges();
         }
-        public ShoppingCart(AppDbContext context) => _context = context; // Injected instance of DbContext for database communication
-        // Methods
         public List<ShoppingCartItem> GetAllShoppingCartItems() => ShoppingCartItems ??= _context.ShoppingCartItems.Where(predicate: spi => spi.ShoppingCartId == ShoppingCartId)
                                                                                                                    .Include(navigationPropertyPath: spi => spi.Movie)
                                                                                                                    .ToList();
