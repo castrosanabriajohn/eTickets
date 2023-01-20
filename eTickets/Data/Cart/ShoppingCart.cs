@@ -40,7 +40,7 @@ namespace eTickets.Data.Cart
                     });
                     break;
                 default:
-                    _context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id).Amount++;
+                    _context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id && spi.ShoppingCartId == ShoppingCartId).Amount++;
                     break;
             }
             _context.SaveChanges();
