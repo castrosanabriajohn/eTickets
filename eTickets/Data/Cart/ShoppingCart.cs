@@ -1,5 +1,8 @@
 ﻿using eTickets.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,10 +11,21 @@ namespace eTickets.Data.Cart
     // Util class for adding, removing and manipulating data from a shopping cart
     public class ShoppingCart
     {
-        public AppDbContext _context;
+        private readonly AppDbContext _context;
+        private const string Key = "ShoppingCartId";
         public string ShoppingCartId { get; set; }
         public List<ShoppingCartItem> ShoppingCartItems { get; set; }
         public ShoppingCart(AppDbContext context) => _context = context; // Injected instance of DbContext for database communication
+        public static ShoppingCart GetShoppingCart(IServiceProvider services)
+        {
+            // Use services to check if there is a session with the same ShoppingCartId
+            ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext?.Session; // Get session with Service Provider
+            AppDbContext context = services.GetService<AppDbContext>();
+            string shoppingCartId = session.GetString(key: Key) ?? Guid.NewGuid() // Otherwise generate a new id and set it to the new session
+                                                                       .ToString();
+            session.SetString(key: Key, value: shoppingCartId);
+            return new ShoppingCart(context: context) { ShoppingCartId = shoppingCartId };
+        }
         // Methods
         public void AddItemToCart(Movie movie)
         {
