@@ -17,7 +17,7 @@ namespace eTickets.Controllers
             _cart = cart;
         }
         // Index action to retrieve and display list of all shopping cart items
-        public IActionResult Index()
+        public IActionResult ShoppingCart()
         {
             _cart.ShoppingCartItems = _cart.GetAllShoppingCartItems();
             ShoppingCartVM model = new() { ShoppingCart = _cart, ShoppingCartTotal = _cart.GetShoppingCartTotal() };
