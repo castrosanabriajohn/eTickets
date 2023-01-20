@@ -12,7 +12,7 @@ namespace eTickets.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configuration for Actor_Movie; Define compound key
-            modelBuilder.Entity<Actor_Movie>().HasKey(am => new 
+            modelBuilder.Entity<Actor_Movie>().HasKey(am => new
             {
                 am.ActorId,
                 am.MovieId
@@ -26,7 +26,7 @@ namespace eTickets.Data
                 .HasOne(am => am.Actor)
                 .WithMany(a => a.Actors_Movies)
                 .HasForeignKey(am => am.ActorId);
-            base .OnModelCreating(modelBuilder); // Pass the model builder to the base class
+            base.OnModelCreating(modelBuilder); // Pass the model builder to the base class
         }
         // Define table names for each model
         public DbSet<Actor> Actors { get; set; }
@@ -37,5 +37,6 @@ namespace eTickets.Data
         // Order related tables
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }
