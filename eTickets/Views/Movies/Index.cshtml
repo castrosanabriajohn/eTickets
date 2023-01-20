@@ -37,7 +37,7 @@
                             <p class="card-text">
                                 <b>End Date: </b>@item.EndDate.ToString("dd MMM yy")
                             </p>
-                            <p class="card-text ">
+                            <p class="card-textz">
                                 <b>Status: </b>
                                 @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
                                 {
@@ -60,7 +60,7 @@
                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary float-right">
                                     <i class="bi bi-eye-fill"></i> Show Details
                                 </a>
-                                <a class="btn btn-success text-white">
+                                <a asp-controller="Orders" asp-action="AddToShoppingCart" asp-route-id="@item.Id" class="btn btn-success text-white">
                                     <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c"))
                                 </a>
                             </p>
