@@ -15,7 +15,7 @@ namespace eTickets.Data.Cart
         // Methods
         public void AddItemToCart(Movie movie)
         {
-            switch (_context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id))
+            switch (_context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id && spi.ShoppingCartId == ShoppingCartId))
             {
                 case null:
                     _context.ShoppingCartItems.Add(entity: new()
@@ -27,6 +27,19 @@ namespace eTickets.Data.Cart
                     break;
                 default:
                     _context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id).Amount++;
+                    break;
+            }
+            _context.SaveChanges();
+        }
+        public void RemoveItemFromCart(Movie movie)
+        {
+            switch (_context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id && spi.ShoppingCartId == ShoppingCartId).Amount <= 1)
+            {
+                case true:
+                    _context.ShoppingCartItems.Remove(entity: _context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id && spi.ShoppingCartId == ShoppingCartId));
+                    break;
+                default:
+                    _context.ShoppingCartItems.FirstOrDefault(predicate: spi => spi.Movie.Id == movie.Id).Amount--;
                     break;
             }
             _context.SaveChanges();
