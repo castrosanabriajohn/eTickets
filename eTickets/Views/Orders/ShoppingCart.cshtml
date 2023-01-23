@@ -67,6 +67,8 @@
 @section Scripts {
     <script src="https://paypalobjects.com/api/checkout.js"></script>
     <script>
+        // HTML function for getting shopping cart total
+        let _total = @Html.Raw(Model.ShoppingCartTotal);
         paypal.Button.render({
             // Configure environment
             env: 'sandbox',
@@ -83,11 +85,21 @@
             commit: true,
             // Set up payment
             payment: function (data, actions) {
-                console.log("Payment set up");
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: _total,
+                            currency: 'USD',
+                        },
+                    }],
+                });
             },
             // Execute payment
             onAuthorize: function (data, actions) {
-                console.log("Payment executed");
+                return actions.payment.execute().then(function () {
+                    var url = '@Url.Action("CompleteOrder", "Orders", new { })';
+                    window.location.href = url; // Change app URL
+                });
             },
         }, '#paypal-btn');
     </script>
