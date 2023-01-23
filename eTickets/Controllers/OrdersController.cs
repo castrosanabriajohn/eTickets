@@ -14,6 +14,12 @@ namespace eTickets.Controllers
         private readonly ShoppingCart _cart;
         private readonly IOrdersService _ordersService;
         public OrdersController(IMoviesService moviesService, ShoppingCart cart, IOrdersService ordersService) => (_moviesService, _cart, _ordersService) = (moviesService, cart, ordersService);
+        public async Task<IActionResult> Index()
+        {
+            string userId = "";
+            List<Order> orders = await _ordersService.GetOrdersByUserIdAsync(userId: userId);
+            return View(model: orders);
+        }
         // Index action to retrieve and display list of all shopping cart items
         public IActionResult ShoppingCart()
         {
