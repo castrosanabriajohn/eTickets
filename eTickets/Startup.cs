@@ -38,6 +38,7 @@ namespace eTickets
             services.AddScoped<IProducersService, ProducersService>();
             services.AddScoped<ICinemasService, CinemasService>();
             services.AddScoped<IMoviesService, MoviesService>();
+            services.AddScoped<IOrdersService, OrdersService>();
             services.AddControllersWithViews();
             services.AddSession(); // Configure session for application
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // Configure HttpContextAccessor for sessions 
