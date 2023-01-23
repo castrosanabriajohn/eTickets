@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace eTickets.Data.Cart
 {
@@ -64,5 +65,11 @@ namespace eTickets.Data.Cart
         public double GetShoppingCartTotal() => _context.ShoppingCartItems.Where(predicate: spi => spi.ShoppingCartId == ShoppingCartId)
                                                                           .Select(selector: spi => spi.Movie.Price * spi.Amount)
                                                                           .Sum();
+        public async Task ClearShoppingCartAsync()
+        {
+            List<ShoppingCartItem> shoppingCartItems = await _context.ShoppingCartItems.Where(predicate: spi => spi.ShoppingCartId == ShoppingCartId).ToListAsync();
+            _context.ShoppingCartItems.RemoveRange(shoppingCartItems);
+            await _context.SaveChangesAsync();
+        }
     }
 }

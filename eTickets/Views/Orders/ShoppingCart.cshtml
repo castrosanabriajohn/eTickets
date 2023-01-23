@@ -51,7 +51,10 @@
         </table>
         <div class="text-center">
             <div class="btn-group">
-                <a class="btn btn-outline-success" asp-controller="Movies" asp-action="Index">
+                <a asp-controller="Orders" asp-action="CompleteOrder" class="btn btn-outline-primary">
+                    Complete order
+                </a>
+                <a asp-controller="Movies" asp-action="Index" class="btn btn-outline-success">
                     Add more items
                 </a>
             </div>
