@@ -1,4 +1,5 @@
 ﻿using eTickets.Data;
+using eTickets.Data.ViewModels;
 using eTickets.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,6 @@ namespace eTickets.Controllers
         public AccountController(UserManager<ApplicationUser> userManager,
                                  SignInManager<ApplicationUser> signInManager,
                                  AppDbContext context) => (_userManager, _signInManager, _context) = (userManager, signInManager, context);
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Login() => View(model: new LoginVM());
     }
 }
