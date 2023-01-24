@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using eTickets.Data.Services;
 using Microsoft.AspNetCore.Http;
 using eTickets.Data.Cart;
+using eTickets.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace eTickets
 {
@@ -46,6 +49,14 @@ namespace eTickets
             {
                 return ShoppingCart.GetShoppingCart(serviceProvider);
             });
+            // Configure authentication and authorization
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
+            services.AddMemoryCache();
+            services.AddAuthentication(configureOptions: options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; // Other identity options include password strength or custom properties for the cookie
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +77,8 @@ namespace eTickets
 
             app.UseRouting();
             app.UseSession(); // Configure session for application
+            // Authentication & Authorization
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -76,6 +89,8 @@ namespace eTickets
             });
             // Seed data
             AppDbInitializer.Seed(app);
+            // Seed Users
+            AppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
         }
     }
 }

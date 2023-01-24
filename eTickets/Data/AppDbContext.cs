@@ -1,9 +1,10 @@
 ﻿using eTickets.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTickets.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         // Receives an options parameter; pass the options parameter to the base class using base keyword 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
