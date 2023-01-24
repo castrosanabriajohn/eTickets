@@ -1,4 +1,5 @@
 ﻿using eTickets.Data;
+using eTickets.Data.Static;
 using eTickets.Data.ViewModels;
 using eTickets.Models;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ namespace eTickets.Controllers
             ApplicationUser user = await _userManager.FindByEmailAsync(email: loginVM.EmailAddress);
             if (user != null)
             {
-                var passwordCheck = await _userManager.CheckPasswordAsync(user: user, password: loginVM.Password);
+                bool passwordCheck = await _userManager.CheckPasswordAsync(user: user, password: loginVM.Password);
                 if (passwordCheck)
                 {
                     SignInResult result = await _signInManager.PasswordSignInAsync(user: user, password: loginVM.Password, isPersistent: false, lockoutOnFailure: false);
@@ -38,6 +39,28 @@ namespace eTickets.Controllers
             }
             TempData["Error"] = "Wrong credentials, please try again!";
             return View(model: loginVM);
+        }
+        public IActionResult Register() => View(model: new RegisterVM());
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterVM registerVM)
+        {
+            if (!ModelState.IsValid) return View(registerVM);
+            ApplicationUser applicationUser = await _userManager.FindByEmailAsync(email: registerVM.EmailAddress);
+            if (applicationUser != null)
+            {
+                TempData["Error"] = "This email address is already in use.";
+                return View(model: registerVM);
+            }
+            ApplicationUser newUser = new()
+            {
+                FullName = registerVM.FullName,
+                Email = registerVM.EmailAddress,
+                UserName = registerVM.EmailAddress,
+            };
+            IdentityResult identityResult = await _userManager.CreateAsync(user: newUser, password: registerVM.Password);
+            if (identityResult.Succeeded)
+                await _userManager.AddToRoleAsync(user: newUser, role: UserRoles.User);
+            return View(viewName: "RegisterCompleted");
         }
     }
 }
