@@ -62,5 +62,11 @@ namespace eTickets.Controllers
                 await _userManager.AddToRoleAsync(user: newUser, role: UserRoles.User);
             return View(viewName: "RegisterCompleted");
         }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(actionName: "Index", controllerName: "Movies");
+        }
     }
 }
