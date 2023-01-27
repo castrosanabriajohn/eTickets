@@ -4,6 +4,7 @@ using eTickets.Data.ViewModels;
 using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace eTickets.Controllers
@@ -16,8 +17,10 @@ namespace eTickets.Controllers
         public OrdersController(IMoviesService moviesService, ShoppingCart cart, IOrdersService ordersService) => (_moviesService, _cart, _ordersService) = (moviesService, cart, ordersService);
         public async Task<IActionResult> Index()
         {
-            string userId = "";
-            List<Order> orders = await _ordersService.GetOrdersByUserIdAsync(userId: userId);
+            // Find values for logged in user using <user claim types>
+            string userId = User.FindFirstValue(claimType: ClaimTypes.NameIdentifier); // Goes for id
+            string userRole = User.FindFirstValue(claimType: ClaimTypes.Role);
+            List<Order> orders = await _ordersService.GetOrdersByUserIdAndRoleAsync(userId: userId, userRole: userRole);
             return View(model: orders);
         }
         // Index action to retrieve and display list of all shopping cart items
@@ -48,9 +51,9 @@ namespace eTickets.Controllers
         public async Task<IActionResult> CompleteOrder()
         {
             List<ShoppingCartItem> shoppingCartItems = _cart.GetAllShoppingCartItems();
-            string userId = "";
-            string userEmailAddress = "";
-            await _ordersService.SaveOrderAsync(shoppingCartItems, userId, userEmailAddress); // Store order to db
+            string userId = User.FindFirstValue(claimType: ClaimTypes.NameIdentifier);
+            string userEmailAddress = User.FindFirstValue(claimType: ClaimTypes.Email);
+            await _ordersService.SaveOrderAsync(items: shoppingCartItems, userId: userId, userEmailAddress: userEmailAddress); // Store order to db
             await _cart.ClearShoppingCartAsync(); // Remove shopping cart items from db
             return View("OrderCompleted");
         }
