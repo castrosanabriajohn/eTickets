@@ -33,11 +33,14 @@ namespace eTickets.Controllers
             List<Movie> allMovies = (List<Movie>)await _service.GetAllAsync(includeProperties: m => m.Cinema);
             if (!string.IsNullOrEmpty(searchString))
             {
-                List<Movie> filteredMovies = allMovies.Where(predicate: am => am.Name.Contains(searchString)
-                || am.Description.Contains(searchString)).ToList();
-                return View(nameof(Index), filteredMovies);
+                List<Movie> filteredMovies = allMovies.Where(predicate: am => am.Name.ToLower()
+                .Contains(value: searchString.ToLower())
+                || am.Description.ToLower()
+                .Contains(value: searchString.ToLower()))
+                .ToList();
+                return View(viewName: nameof(Index), model: filteredMovies);
             }
-            return View(nameof(Index), allMovies);
+            return View(viewName: nameof(Index), model: allMovies);
         }
         // GET: Movies/Details/Id
         [AllowAnonymous]
