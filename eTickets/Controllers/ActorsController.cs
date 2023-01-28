@@ -1,10 +1,12 @@
 ﻿using eTickets.Data.Services;
 using eTickets.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace eTickets.Controllers
 {
+    [Authorize]
     public class ActorsController : Controller
     {
         // Declare the ActorsService interface
@@ -16,6 +18,7 @@ namespace eTickets.Controllers
         }
         // Default Method/ActionResult -> Index() was created
         // To call this view go to -> Actors/Index
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var data = await _service.GetAllAsync();
@@ -38,6 +41,7 @@ namespace eTickets.Controllers
             return RedirectToAction(nameof(Index));
         }
         // GET: Actors/Details/Id
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             var actorDetails = await _service.GetByIdAsync(id);
