@@ -108,10 +108,9 @@ namespace eTickets.Controllers
                 ViewBag.Cinemas = new SelectList(movieDropdownsValues.Cinemas, "Id", "Name");
                 ViewBag.Producers = new SelectList(movieDropdownsValues.Producers, "Id", "FullName");
                 ViewBag.Actors = new SelectList(movieDropdownsValues.Actors, "Id", "FullName");
-                await _service.AddMovieAsync(newMovie);
                 return View(newMovie);
-
             }
+            await _service.UpdateMovieAsync(newMovie);
             return RedirectToAction(nameof(Index));
         }
     }

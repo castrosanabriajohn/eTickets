@@ -5,8 +5,7 @@ namespace eTickets.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [Display(Name = "Ful")]
+        [Display(Name = "Full name")]
         public string FullName { get; set; }
-
     }
 }
