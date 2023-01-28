@@ -4,6 +4,8 @@ using eTickets.Data.ViewModels;
 using eTickets.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -17,6 +19,7 @@ namespace eTickets.Controllers
         public AccountController(UserManager<ApplicationUser> userManager,
                                  SignInManager<ApplicationUser> signInManager,
                                  AppDbContext context) => (_userManager, _signInManager, _context) = (userManager, signInManager, context);
+        public async Task<IActionResult> Users() => View(model: await _context.Users.ToListAsync());
         public IActionResult Login() => View(model: new LoginVM());
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM loginVM)

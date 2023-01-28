@@ -20,11 +20,21 @@ else
             <i class="bi bi-person-badge"></i> Hello @userManager.GetUserName(User)
         </button>
         <ul aria-labelledby="profile-btn" class="dropdown-menu">
+            @*Orders*@
             <li>
                 <a asp-controller="Orders" asp-action="Index" class="dropdown-item">
                     <i class="bi bi-list"></i> Orders
                 </a>
             </li>
+            @*Users*@
+            @if (User.IsInRole("Admin"))
+            {
+                <li>
+                    <a asp-controller="Account" asp-action="Users" class="dropdown-item">
+                        <i class="bi bi-people"></i> Users
+                    </a>
+                </li>
+            }
         </ul>
     </div>
     <span style="padding: 5px"></span>
@@ -35,4 +45,3 @@ else
         </button>
     </form>
 }
-
