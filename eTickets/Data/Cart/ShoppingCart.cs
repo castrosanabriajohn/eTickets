@@ -70,6 +70,7 @@ namespace eTickets.Data.Cart
             List<ShoppingCartItem> shoppingCartItems = await _context.ShoppingCartItems.Where(predicate: spi => spi.ShoppingCartId == ShoppingCartId).ToListAsync();
             _context.ShoppingCartItems.RemoveRange(shoppingCartItems);
             await _context.SaveChangesAsync();
+            shoppingCartItems = new List<ShoppingCartItem>();
         }
     }
 }
