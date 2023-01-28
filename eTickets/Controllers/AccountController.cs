@@ -5,7 +5,6 @@ using eTickets.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -71,5 +70,6 @@ namespace eTickets.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(actionName: "Index", controllerName: "Movies");
         }
+        public IActionResult AccessDenied() => View(viewName: nameof(AccessDenied));
     }
 }
